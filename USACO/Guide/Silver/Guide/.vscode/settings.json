@@ -1,0 +1,24 @@
+{
+    "files.associations": {
+        "vector": "cpp",
+        "utility": "cpp",
+        "xstring": "cpp",
+        "ostream": "cpp",
+        "xtree": "cpp",
+        "algorithm": "cpp",
+        "compare": "cpp",
+        "exception": "cpp",
+        "istream": "cpp",
+        "iterator": "cpp",
+        "map": "cpp",
+        "memory": "cpp",
+        "numeric": "cpp",
+        "set": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "xmemory": "cpp",
+        "xutility": "cpp",
+        "iostream": "cpp",
+        "cstdlib": "cpp"
+    }
+}
