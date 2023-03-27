@@ -1,3 +1,4 @@
+#pragma once
 #include <bits/stdc++.h>
 using namespace std;
 struct LCA
@@ -23,7 +24,7 @@ struct LCA
         tin.resize(n + 1), depth.resize(n + 1), st.resize(lg(2 * n - 1) + 1, vector<int>(2 * n - 1)), t = 0;
         dfs(1, 0);
         for (int i = 1; i <= lg(t); i++)
-            for (int j = 0; j < t - (1 << i); j++)
+            for (int j = 0; j <= t - (1 << i); j++)
                 st[i][j] = depthmin(st[i - 1][j], st[i - 1][j + (1 << (i - 1))]);
     }
     int query(int a, int b)
