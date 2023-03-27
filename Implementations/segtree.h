@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// basic
 template<class T, T comb(T&, T&), T D> 
 struct Seg {
     int n;
@@ -23,24 +24,24 @@ struct Seg {
     }
 };
 
+// sparse
 template<class T, T comb(T&, T&), T D> struct node {
     T val;
-    ll lb, rb;
     node *left, *right;
-    node(ll lb, ll rb) : lb(lb), rb(rb), val(0) { left = right = NULL; }
-    void upd(ll k, T v) {
+    node() : val(D) { left = right = NULL; }
+    void upd(ll k, T v, ll lb, ll rb) {
         val = comb(val, v);
         if(lb == k && rb == k) return;
         ll m = (lb + rb) / 2;
         if(k <= m) {
-            if(!left) left = new node(lb, m);
-            left->upd(k, v);
+            if(!left) left = new node();
+            left->upd(k, v, lb, m);
         } else {
-            if(!right) right = new node(m + 1, rb);
-            right->upd(k, v);
+            if(!right) right = new node();
+            right->upd(k, v, m + 1, rb);
         }
     }
-    T query(ll l, ll r) {
+    T query(ll l, ll r, ll lb, ll rb) {
         if(r < lb || rb < l) return 0;
         if(l <= lb && rb <= r) return val;
         ll m = (lb + rb) / 2;

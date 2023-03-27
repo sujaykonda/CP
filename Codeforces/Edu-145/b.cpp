@@ -10,21 +10,27 @@ template<class T> string str(T a) { string s = "{"; for(auto v : a) s += str(v) 
     if(s.size() > 2) s.pop_back(), s.pop_back(); s += "}"; return s; }
 template<class T> string strnl(T a) { string s = ""; for(auto v : a) s += str(v) + "\n"; return s; }
 
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-template <class T> using Tree = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+ll sqrt(ll x)
+{
+    ll hi = 1e9, lo = 0;
+    while (hi > lo)
+    {
+        ll mid = (hi + lo + 1) / 2;
+        if (mid * mid < x)
+            lo = mid;
+        else
+            hi = mid - 1;
+    }
+    return lo;
+}
 
-const int MOD = 1000000007;
-#include "rurq.h"
 
-ll sgmax(ll a, ll b) { return max(a, b); }
 int main() {
-    ios::sync_with_stdio(false), cin.tie(nullptr);
-    node<10>* seg = new node<10>();
-    cout << "created" << endl;
-    seg->upd(5, 0, 5);
-    cout << "first upd" << endl;
-    seg->upd(5, 3, 9);
-    cout << "second upd" << endl;
-    cout << seg->query(0, 9) << endl;
+    int t;
+    cin >> t;
+    for(int i = 0; i < t; i++) {
+        ll n;
+        cin >> n;
+        cout << (ll)sqrt(n) << endl;
+    }
 }

@@ -9,22 +9,13 @@ template<class T, class U> string str(pair<T, U> p) { return "(" + str(p.first) 
 template<class T> string str(T a) { string s = "{"; for(auto v : a) s += str(v) + ", "; 
     if(s.size() > 2) s.pop_back(), s.pop_back(); s += "}"; return s; }
 template<class T> string strnl(T a) { string s = ""; for(auto v : a) s += str(v) + "\n"; return s; }
+int lg(unsigned long long i) { return i ? __builtin_clzll(1) - __builtin_clzll(i) : -1; }
 
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-template <class T> using Tree = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-
-const int MOD = 1000000007;
-#include "rurq.h"
-
-ll sgmax(ll a, ll b) { return max(a, b); }
 int main() {
-    ios::sync_with_stdio(false), cin.tie(nullptr);
-    node<10>* seg = new node<10>();
-    cout << "created" << endl;
-    seg->upd(5, 0, 5);
-    cout << "first upd" << endl;
-    seg->upd(5, 3, 9);
-    cout << "second upd" << endl;
-    cout << seg->query(0, 9) << endl;
+    int t; cin >> t;
+    for(int i = 0; i < t; i++) {
+        int n; cin >> n;
+        vector<int> a(n);
+        
+    }
 }

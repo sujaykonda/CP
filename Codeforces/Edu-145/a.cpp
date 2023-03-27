@@ -10,21 +10,20 @@ template<class T> string str(T a) { string s = "{"; for(auto v : a) s += str(v) 
     if(s.size() > 2) s.pop_back(), s.pop_back(); s += "}"; return s; }
 template<class T> string strnl(T a) { string s = ""; for(auto v : a) s += str(v) + "\n"; return s; }
 
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-template <class T> using Tree = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-
-const int MOD = 1000000007;
-#include "rurq.h"
-
-ll sgmax(ll a, ll b) { return max(a, b); }
 int main() {
-    ios::sync_with_stdio(false), cin.tie(nullptr);
-    node<10>* seg = new node<10>();
-    cout << "created" << endl;
-    seg->upd(5, 0, 5);
-    cout << "first upd" << endl;
-    seg->upd(5, 3, 9);
-    cout << "second upd" << endl;
-    cout << seg->query(0, 9) << endl;
+    int t;
+    cin >> t;
+    for(int i = 0; i < t; i++) {
+        string s;
+        cin >> s;
+        array<int, 10> cnt{};
+        for(int i = 0; i < s.length(); i++)
+            cnt[s[i] - '0']++;
+        int mxcnt = 0;
+        for(int i = 0; i < 10; i++)
+            mxcnt = max(mxcnt, cnt[i]);
+        if(mxcnt == 4) cout << -1 << endl;
+        else if(mxcnt == 3) cout << 6 << endl;
+        else cout << 4 << endl;
+    }
 }
