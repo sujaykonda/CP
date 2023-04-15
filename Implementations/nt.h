@@ -56,5 +56,36 @@ vector<pair<int, int>> pf(vector<int>& lpf, int x)
     return f;
 }
 
+ll fe(ll a, ll b, ll m) { return b == 0 ? 1 : ((fe((a * a) % m, b / 2, m) % m) * ((b % 2 ? a : 1) % m) % m); }
+ll minv(ll a, ll p) { return fe(a, p - 2, p); }
+
+vector<ll> f;
+vector<ll> invf;
 
 
+void factorials(ll mx, ll m)
+{
+    f.resize(mx);
+    invf.resize(mx);
+    f[0] = 1, invf[0] = 1;
+    for (int i = 1; i < mx; i++)
+        f[i] = (f[i - 1] * i) % m;
+    invf[mx - 1] = minv(f[mx - 1], m);
+    for (int i = mx - 1; i >= 1; i--)
+        invf[i - 1] = (invf[i] * i) % m;
+}
+
+#define getbit(mask, i) ((mask & (1 << i)) > 0)
+
+// xor basis
+template<int SZ> struct XorBasis {
+    array<int, SZ> basis{};
+    void add(int mask) {
+        for(int i = SZ - 1; i >= 0; i--) {
+            if(getbit(mask, i)) {
+                if(!basis[i]) { basis[i] = mask; return; }
+                mask ^= basis[i];
+            }
+        }
+    }
+};
