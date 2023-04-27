@@ -1,5 +1,5 @@
-#pragma GCC optimize ("Ofast")
-#pragma GCC target ("avx,avx2")
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx2,bmi,bmi2,lzcnt,popcnt")
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -23,9 +23,37 @@ template<class T, class U> istream& operator>>(istream& is, pair<T, U>& p) { is 
 template<class T, int S> istream& operator>>(istream& is, array<T, S>& a) { for(int i = 0; i < S; i++) is >> a[i]; return is;}
 template<class T> istream& operator>>(istream& is, vector<T>& a) { for(auto& v : a) is >> v; return is; }
 
+
 int main() {
     ios::sync_with_stdio(false), cin.tie(nullptr);
 }
+
+
+// superfast io
+void rd(char& x) { x = getchar(); }
+void rd(ll& x) {
+    x = 0; int mult = 1; char c; rd(c);
+    for (; (c <= 47 || 58 <= c) && c != '-'; rd(c));
+    if(c == '-') mult = -1, rd(c);
+    for (; (c>47 && c<58); rd(c))
+        x = 10 * x + c - 48;
+    x *= mult;
+}
+void rd(int& x) {
+    x = 0; int mult = 1; char c; rd(c);
+    for (; (c <= 47 || 58 <= c) && c != '-'; rd(c));
+    if(c == '-') mult = -1, rd(c);
+    for (; (c>47 && c<58); rd(c))
+        x = 10 * x + c - 48;
+    x *= mult;
+}
+void rd(string& s) {
+    s = ""; char c;
+    for(; !isgraph(c); rd(c));
+    for(; isgraph(c); rd(c))
+        s += c;
+}
+template<class T> void rd(T& o) { for(auto& v : o) rd(v); }
 
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;

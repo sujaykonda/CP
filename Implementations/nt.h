@@ -10,13 +10,30 @@ template <int MOD> struct mint {
     mint& operator+=(mint o) { if((v += o.v) >= MOD) v -= MOD; return *this; }
     mint& operator-=(mint o) { if((v -= o.v) < 0) v += MOD; return *this; }
     mint& operator*=(mint o) { v = int((long long) v * o.v % MOD); return *this; }
+    mint& operator/=(mint o) { return (*this) *= inv(o);}
     friend mint pow(mint a, long long p) { assert(p >= 0); return p == 0 ? 1 : pow(a * a, p / 2) * (p & 1 ? a : 1); }
     friend mint inv(mint a) { return pow(a, MOD - 2); }
     friend mint operator+(mint a, mint b) { return a += b; }
     friend mint operator-(mint a, mint b) { return a -= b; }
     friend mint operator*(mint a, mint b) { return a *= b; }
+    friend mint operator/(mint a, mint b) { return a /= b; }
+    friend istream& operator>>(istream& is, mint& m) { is >> m.v; return is; }
     friend string str(mint a) { return to_string(a.v); }
     friend bool operator<(mint a, mint b) { return a.v < b.v; }
+};
+
+template<int M1, int M2, int M3> struct Hash {
+    mint<M1> a; mint<M2> b; mint<M3> c;
+    Hash(int v) { a.v = v, b.v = v, c.v = v; }
+    Hash& operator+=(Hash o) { a += o.a, b += o.b, c += o.c; return *this; }
+    Hash& operator-=(Hash o) { a -= o.a, b -= o.b, c += o.c; return *this; }
+    Hash& operator*=(Hash o) { a *= o.a, b *= o.b, c += o.c; return *this; }
+    Hash& operator/=(Hash o) { a /= o.a, b /= o.b, c += o.c; return *this; }
+    friend Hash operator+(Hash a, Hash b) { return a += b; }
+    friend Hash operator-(Hash a, Hash b) { return a -= b; }
+    friend Hash operator*(Hash a, Hash b) { return a *= b; }
+    friend Hash operator/(Hash a, Hash b) { return a /= b; }
+    friend bool operator<(Hash a, Hash b) { return {a.a.v, a.b.v, a.c.v} < {b.a.v, b.b.v, b.c.v}; }
 };
 
 // linear sieve (idk why)
