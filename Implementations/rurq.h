@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
+#define pb push_back
 
 struct RURQ {
     int n;
@@ -41,7 +42,6 @@ struct RURQ {
     int query(int l, int r) { return query(1, l, r, 0, n - 1); }
 };
 // generic sparse RURQ
-const ll SZ = 0;
 struct node {
     struct Upd { };
     struct Data { };
@@ -53,7 +53,7 @@ struct node {
     ll lb, rb;
     node *left, *right;
     node(ll lb, ll rb) : lb(lb), rb(rb) { left = right = NULL; }
-    node() : node(0, SZ) {}
+    node(ll sz) : node(0, sz) {}
     
     // propogate lazy info downward
     void push() {
@@ -93,5 +93,40 @@ struct node {
         if(l == lb && r == rb) return d;
         cc(), push();
         return comb(left->query(l, r), right->query(l, r));
+    }
+};
+
+// dynamic connectivity
+const ll SZ = 0;
+struct node {
+    vector<int> lst;
+    ll lb, rb;
+    node *left, *right;
+    node(ll lb, ll rb) : lb(lb), rb(rb) { left = right = NULL; }
+    node() : node(0, SZ) {}
+    
+    // creates the child nodes
+    void cc() {
+        ll m = (lb + rb) / 2;
+        if(!left) left = new node(lb, m);
+        if(!right) right = new node(m + 1, rb);
+    }
+
+    // update
+    void upd(int u, ll l, ll r) {
+        l = max(l, lb), r = min(r, rb);
+        if(l > r) return;
+        if(l == lb && r == rb) { lst.pb(u); return; }
+        cc();
+        left->upd(u, l, r);
+        right->upd(u, l, r);
+    }
+
+    void dfs() {
+        if(lb < rb) {
+            cc();
+            left->dfs();
+            right->dfs();
+        }
     }
 };
