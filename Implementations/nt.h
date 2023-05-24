@@ -8,7 +8,7 @@ template <int MOD> struct mint {
     mint() : v(0) {}
     mint(long long _v) : v(int(_v % MOD)) { v += (v < 0) * MOD; }
     mint& operator+=(mint o) { if((v += o.v) >= MOD) v -= MOD; return *this; }
-    mint& operator-=(mint o) { if((v -= o.v) < 0) v += MOD; return *this; }
+    mint& operator-=(mint o) { v += ((v -= o.v) < 0) * MOD; return *this; }
     mint& operator*=(mint o) { v = int((long long) v * o.v % MOD); return *this; }
     mint& operator/=(mint o) { return (*this) *= inv(o);}
     friend mint pow(mint a, long long p) { assert(p >= 0); return p == 0 ? 1 : pow(a * a, p / 2) * (p & 1 ? a : 1); }
@@ -20,6 +20,21 @@ template <int MOD> struct mint {
     friend istream& operator>>(istream& is, mint& m) { is >> m.v; return is; }
     friend string str(mint a) { return to_string(a.v); }
     friend bool operator<(mint a, mint b) { return a.v < b.v; }
+};
+
+template <int MOD> struct Comb {
+    vector<mint<MOD>> f, invf;
+    Comb() : Comb(0) {}
+    Comb(int n) : f(n + 1), invf(n + 1) {
+        f[0] = 1;
+        for (int i = 1; i <= n; i++)
+            f[i] = f[i - 1] * i;
+        invf[n] = inv(f[n]);
+        for (int i = n; i >= 1; i--)
+            invf[i - 1] = invf[i] * i;
+    }
+    mint<MOD> choose(int n, int k) { return (k > n) ? 0 : (f[n] * invf[k] * invf[n - k]); }
+    mint<MOD> perm(int n, int k) { return (k > n) ? 0 : (f[n] * invf[n - k]); }
 };
 
 template<int M1, int M2, int M3> struct Hash {

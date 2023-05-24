@@ -18,8 +18,10 @@ int main() {
     for(int i = 0; i < N; i++) {
         int a, k;
         cin >> a >> k;
+        cout << f(a, k) << endl;
         ans ^= f(a, k);
     }
+    cout << ans << endl;
     if(ans == 0) cout << "Aoki\n";
     else cout << "Takahashi\n";
 }

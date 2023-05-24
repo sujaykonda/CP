@@ -6,6 +6,7 @@ using namespace std;
 using ll = long long;
 #define pb push_back
 #define getbit(mask, i) ((mask & (1 << i)) > 0)
+#define nl '\n'
 // debug tools
 string str(char c) { return string(1, c); } string str(_Bit_reference b) { return b ? "T" : "F"; }
 string str(int x) { return to_string(x); } string str(ll x) { return to_string(x); }
@@ -53,7 +54,10 @@ void rd(string& s) {
     for(; isgraph(c); rd(c))
         s += c;
 }
-template<class T> void rd(T& o) { for(auto& v : o) rd(v); }
+template<class T> void rd(T& o); template<class T, int S> void rd; 
+template<class T, class U> void rd(pair<T, U>& p) { rd(p.first), rd(p.second); }
+template<class T, int S> void rd(array<T, S>& a) { for(int i = 0; i < S; i++) rd(a[i]); }
+template<class T> void rd(T& o)  { for(auto& v : o) rd(v); };
 
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
