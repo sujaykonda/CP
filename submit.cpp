@@ -20,6 +20,7 @@ void rd(ll& x) {
 void rd(int& x) { ll y; rd(y); x = y; }
 void rd(std::string& s) {
     s = ""; char c; rd(c);
+    s = ""; char c; rd(c);
     for(; !isgraph(c); rd(c));
     for(; isgraph(c); rd(c))
         s += c;
@@ -71,7 +72,6 @@ void tc() {
         int bv = min(pow(10, C) - av, pow(10, B)) + k - 1;
         cout << av << " + " << bv << " = " << av + bv << endl;
     }
-}
 
 int main() {
     int t; rd(t);
