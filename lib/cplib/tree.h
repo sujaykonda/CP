@@ -4,8 +4,8 @@
 #include <cplib/general.h>
 
 struct LCA {
-    int n; std::vec<std::vec<int>> jmp; std::vec<int> dep;
-    LCA(adjv& adj) : n(adj.size()), jmp(lg(adj.size()) + 1, std::vec<int>(adj.size())), dep(adj.size()) {
+    int n; std::vector<std::vector<int>> jmp; std::vector<int> dep;
+    LCA(adjv& adj) : n(adj.size()), jmp(lg(adj.size()) + 1, std::vector<int>(adj.size())), dep(adj.size()) {
         rt(adj, 1, 0); 
         for(int i = 0; i < jmp.size() - 1; i++)
             for(int j = 0; j < jmp[i].size(); j++)

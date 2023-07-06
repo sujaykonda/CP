@@ -5,7 +5,7 @@
 // dsu by rank
 struct DSU
 {
-    std::vec<int> e;
+    std::vector<int> e;
     DSU(int N) : e(N, -1) { }
     int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); }
     int size(int x) { return -e[get(x)]; }

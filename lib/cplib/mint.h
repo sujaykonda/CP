@@ -24,7 +24,7 @@ template <int MOD> struct mint {
 };
 
 template <int MOD> struct Comb {
-    std::vec<mint<MOD>> f, invf;
+    std::vector<mint<MOD>> f, invf;
     Comb() : Comb(0) {}
     Comb(int n) : f(n + 1), invf(n + 1) {
         f[0] = 1;
@@ -37,3 +37,4 @@ template <int MOD> struct Comb {
     mint<MOD> choose(int n, int k) { return (k > n) ? 0 : (f[n] * invf[k] * invf[n - k]); }
     mint<MOD> perm(int n, int k) { return (k > n) ? 0 : (f[n] * invf[n - k]); }
 };
+

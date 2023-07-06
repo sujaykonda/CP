@@ -33,3 +33,4 @@ template<class D, class LZ, class U> struct _node {
         return left->query(l, r) + right->query(l, r);
     }
 };
+
