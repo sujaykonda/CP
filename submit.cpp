@@ -25,7 +25,7 @@ void rd(int& x) {
     x *= mult;
 }
 void rd(std::string& s) {
-    s = ""; char c;
+    s = ""; char c; rd(c);
     for(; !isgraph(c); rd(c));
     for(; isgraph(c); rd(c))
         s += c;
@@ -42,93 +42,44 @@ template<class T, class U> void rd(std::pair<T, U>& p) { rd(p.first), rd(p.secon
 template<class T, int S> void rd(std::array<T, S>& a) { for(int i = 0; i < S; i++) rd(a[i]); }
 template<class T> void rd(T& o)  { for(auto& v : o) rd(v); };
 
-template<class D, class LZ, class U> struct _node {
-    D d; LZ lz;
-    ll lb, rb;
-    _node *left, *right;
-    _node(ll lb, ll rb) : lb(lb), rb(rb) { left = right = NULL; }
-    _node(ll sz) : _node(0, sz) {}
-    // creates the child nodes
-    void cc() {
-        ll m = (lb + rb) / 2;
-        if(!left) left = new _node(lb, m);
-        if(!right) right = new _node(m + 1, rb);
-    }
+using namespace std;
 
-    // update
-    void upd(U u, ll l, ll r) {
-        l = std::max(l, lb), r = std::min(r, rb);
-        if(l > r) return;
-        if(l == lb && r == rb) { apply(u, this); return; }
-        cc(), push(this);
-        left->upd(u, l, r), right->upd(u, l, r);
-        d = left->d + right->d;
-    }
-
-    // querying
-    D query(ll l, ll r) {
-        l = std::max(l, lb), r = std::min(r, rb);
-        if(l > r) { return D(); }
-        if(l == lb && r == rb) return d;
-        cc(), push(this);
-        return left->query(l, r) + right->query(l, r);
-    }
-};using namespace std;
-
-struct LZ { ll set, add; };
-struct U { ll set, add; };
-typedef _node<ll, LZ, U> node;
-void apply(U u, node* n) {
-    if(u.set == 0) {
-        n->d += u.add * (n->rb - n->lb + 1);
-        if(n->lz.set == 0) {
-            n->lz.add += u.add;
-        } else {
-            n->lz.set += u.add;
-        }
-    } else {
-        n->d = u.set * (n->rb - n->lb + 1);
-        n->lz.add = 0;
-        n->lz.set = u.set;
-    }
-}
-void push(node* n) {
-    if(n->lz.set != 0) {
-        n->left->d = (n->left->rb - n->left->lb + 1) * n->lz.set;
-        n->right->d = (n->right->rb - n->right->lb + 1) * n->lz.set;
-        n->left->lz.set = n->right->lz.set = n->lz.set;
-        n->left->lz.add = n->right->lz.add = 0;
-        n->lz.set = 0;
-    }
-    else {
-        n->left->d += (n->left->rb - n->left->lb + 1) * n->lz.add;
-        n->right->d += (n->right->rb - n->right->lb + 1) * n->lz.add;
-        if(n->left->lz.set != 0) n->left->lz.set += n->lz.add;
-        else n->left->lz.add += n->lz.add;
-        if(n->right->lz.set != 0) n->right->lz.set += n->lz.add;
-        else n->right->lz.add += n->lz.add;
-        n->lz.add = 0;
-    }
-}
-
+vector<vector<int>> adj;
 int main() {
-    int n, q; rd(n), rd(q);
-    node* segt = new node(n - 1);
-    for(int i = 0; i < n; i++) {
-        int v; rd(v);
-        segt->upd(U{v, 0}, i, i);
+    int n; rd(n);
+    adj.resize(n + 1);
+    for(int i = 0; i < n - 1; i ++) {
+        int a, b; rd(a), rd(b);
+        adj[a].pb(b);
+        adj[b].pb(a);
     }
-    for(int i = 0; i < q; i++) {
-        int t, a, b; rd(t), rd(a), rd(b);
-        a--, b--;
-        if(t == 3)
-            cout << segt->query(a, b) << endl;
-        else {
-            int x; rd(x);
-            if(t == 1)
-                segt->upd(U{0, x}, a, b);
-            else
-                segt->upd(U{x, 0}, a, b);
+    
+    vector<vector<int>> rts(n + 1);
+    for(int rt = 1; rt <= n; rt++) {
+        vector<int> d(n + 1, -1);
+        queue<int> q;
+        d[rt] = 0; q.push(rt);
+        while(!q.empty()) {
+            int s = q.front();
+            rts[rt].pb(d[s]);
+            q.pop();
+            for(int u : adj[s]) {
+                if(d[u] == -1) {
+                    d[u] = d[s] + 1;
+                    q.push(u);
+                }
+            }
         }
     }
-}
+
+    vector<ll> ans(n + 1, 0);
+    for(int rt = 1; rt <= n; rt++) {
+        ll sm = 0;
+        for(int i = 0; i < n; i++) {
+            sm += rts[rt][i];
+            ans[i + 1] = max(ans[i + 1], (ll) (i + 1) * (n - 1) - 2 * sm);
+        }
+    }
+    for(ll a : ans) cout << a << " ";
+    cout << endl;
+}  
