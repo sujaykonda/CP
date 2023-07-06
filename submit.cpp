@@ -72,7 +72,7 @@ void tc() {
         int bv = min(pow(10, C) - av, pow(10, B)) + k - 1;
         cout << av << " + " << bv << " = " << av + bv << endl;
     }
-
+}
 int main() {
     int t; rd(t);
     for(int i = 0; i < t; i++) tc();
