@@ -6,7 +6,7 @@ using ll = long long;
 #define pb push_back
 #define getbit(mask, i) ((mask & (1 << i)) > 0)
 #define nl '\n' 
-typedef std::vector<std::vector<int>> adjv;
+typedef std::vector<std::vector<int>> adjlist;
 
 template<class T> T _max(T a, T b) { return (a > b) ? a : b; }
 template<class T> T _min(T a, T b) { return (b > a) ? a : b; }
@@ -27,7 +27,7 @@ void rd(std::string& s) {
     for(; isgraph(c); rd(c))
         s += c;
 }
-void rdg(adjv& adj, int m, bool b1 = true, bool b2 = false) {
+void rdg(adjlist& adj, int m, bool b1 = true, bool b2 = false) {
     for(int i = 0; i < m; i++) {
         int a, b; rd(a), rd(b);
         if(b1) adj[a].pb(b);

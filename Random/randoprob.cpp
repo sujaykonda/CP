@@ -1,7 +1,7 @@
 #include <cplib/general.h>
 using namespace std;
 
-adjv adj;
+adjlist adj;
 vector<int> o;
 vector<bool> done;
 void dfs(int s) {

@@ -10,7 +10,7 @@ from typing import List, Set, Optional
 
 def expand(code, included):
     includes = [[m.start(), m.end(), code[m.start() : m.end()].replace("\n", "").replace(" ", "").replace(">", "").replace("#include<", "")] for m in re.finditer(
-        r'#include\s*["<](cplib/[a-z_]*(|.h))[">]\s*', code)]
+        r'#include\s*["<](cplib/[a-z_/]*(|.h))[">]\s*', code)]
     if(len(includes) == 0): 
         return code
     off = 0

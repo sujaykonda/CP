@@ -1,6 +1,6 @@
 #pragma once
 // start
-#include <cplib/mint.h>
+#include <cplib/math/mint.h>
 // sorts indices by reverse binary order
 template<class T> void rsort(std::vector<T>& a) {
     for (int i = 1, j = 0; i < a.size(); i++) {

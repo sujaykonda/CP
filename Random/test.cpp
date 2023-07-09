@@ -1,4 +1,4 @@
-#include <cplib/rurq.h>
+#include <cplib/ds/rurq.h>
 using namespace std;
 
 struct LZ { ll set, add; };

@@ -1,4 +1,4 @@
-#include <cplib/hash.h>
+#include <cplib/math/hash.h>
 using namespace std;
 const int MOD = 998244353;
 

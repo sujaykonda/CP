@@ -1,4 +1,4 @@
-#include <cplib/mint.h>
+#include <cplib/math/mint.h>
 using namespace std;
 
 const int MOD = 998244353;

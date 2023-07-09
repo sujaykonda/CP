@@ -1,6 +1,6 @@
 #pragma once
 // start
-#include <cplib/mint.h>
+#include <cplib/math/mint.h>
 template<int M1, int M2, int M3> struct HashC {
     mint<M1> a; mint<M2> b; mint<M3> c;
     HashC(int v) { a.v = v, b.v = v, c.v = v; }

@@ -5,7 +5,7 @@ template<class D, class LZ, class U> struct _node {
     D d; LZ lz;
     ll lb, rb;
     _node *left, *right;
-    _node(ll lb, ll rb) : lb(lb), rb(rb) { left = right = NULL; }
+    _node(ll lb, ll rb) : lb(lb), rb(rb), d(), lz() { left = right = NULL; }
     _node(ll sz) : _node(0, sz) {}
     // creates the child nodes
     void cc() {
