@@ -21,8 +21,8 @@ vector<int> pals;
 vector<int> digits(int i){
 	int d;
 	while(i>0){
-		i /= 10
-		d += 1
+		i /= 10;
+		d += 1;
 	}
 	return d;
 }

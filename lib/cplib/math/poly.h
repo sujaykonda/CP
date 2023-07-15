@@ -25,7 +25,7 @@ template<int MOD, int PRT> void convModPrt(std::vector<mint<MOD>>& A, std::vecto
     int n = 1; while(n < A.size() || n < B.size()) n *= 2;
     n *= 2, A.resize(n), B.resize(n);
     
-    mint<MOD> rt = pow(mint<MOD>(PRT), (MOD - 1) / n); 
+    mint<MOD> rt = bpow(mint<MOD>(PRT), (MOD - 1) / n); 
     std::vector<mint<MOD>> rts(n / 2, 1);
     for(int i = 1; i < n / 2; i++)
         rts[i] = rts[i - 1] * rt;

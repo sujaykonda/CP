@@ -10,10 +10,10 @@ void testcase() {
     mint<MOD> ans = 0;
     mint<MOD> choose = 1;
     for(int i = 0; i < n; i++) {
-        ans += choose * pow(mint<MOD>(k - 1), m - i);
+        ans += choose * bpow(mint<MOD>(k - 1), m - i);
         choose *= m - i, choose /= (i + 1);
     }
-    cout << (pow(mint<MOD>(k), m) - ans).v << endl;
+    cout << (bpow(mint<MOD>(k), m) - ans).v << endl;
 }
 
 int main() {

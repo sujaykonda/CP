@@ -43,7 +43,7 @@ int main() {
         int dcnt = 0;
         for(int j = 0; j < 1 << (i - 1); j++) dcnt += dead[j];
 
-        dp[i] = dp[i - 1] * pow(mint<MOD>(2), (1 << (i - 1)) - noswpcnt) * comb.f[(1 << (i - 1)) - dcnt];
+        dp[i] = dp[i - 1] * bpow(mint<MOD>(2), (1 << (i - 1)) - noswpcnt) * comb.f[(1 << (i - 1)) - dcnt];
 
     }
     cout << dp[n] << endl;

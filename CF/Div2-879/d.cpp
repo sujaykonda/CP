@@ -1,9 +1,9 @@
-#include <cplib/ds/sparsesegt.h>
+#include <cplib/ds/sparse/segt.h>
 using namespace std;
 
 struct minint { int v; minint() { v = 1e9; } minint(int _v) { v = _v; } 
     friend minint operator+(minint a, minint b) { return minint(min(a.v, b.v)); } };
-typedef _node<minint> node;
+typedef _node_segt<minint> node;
 
 void tc() {
     int n, m; rd(n, m);

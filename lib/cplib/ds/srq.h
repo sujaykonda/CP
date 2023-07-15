@@ -9,7 +9,7 @@ struct SRQ {
     SRQ(std::vector<T>& v) : v(v), tab(lg(v.size()) + 1, std::vector<T>(v.size())) {
         for(int k = 1; k <= v.size(); k++) {
             // cool trick!
-            int rad = 1, i = 0; while(k % (2 * rad) == 0) rad *= 2, i++;
+            int rad = k&-k, i = lg(rad); 
             tab[i][k - 1] = T(v[k - 1]);
             for(int j = k - 2; j >= k - rad; j--)
                 tab[i][j] = comb(v[j], tab[i][j + 1]);

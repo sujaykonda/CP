@@ -1,8 +1,9 @@
-#include <cplib/ds/rurq.h>
+#include <cplib/ds/sparse/rurq.h>
 using namespace std;
 struct maxint { ll v; maxint() { v = 0; } maxint(ll _v) { v = _v; } 
-    friend maxint operator+(maxint a, maxint b) { return maxint(max(a.v, b.v)); } };
-typedef _node<maxint, ll, ll> node;
+    friend maxint operator+(maxint a, maxint b) { return maxint(max(a.v, b.v)); } 
+    void set(maxint o) { v = o.v; }};
+typedef _node_rurq<maxint, ll, ll> node;
 
 void apply(ll u, node* n) {
     n->lz += u; n->d.v += u; }

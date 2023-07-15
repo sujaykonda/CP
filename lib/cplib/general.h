@@ -7,10 +7,12 @@ using ll = long long;
 #define getbit(mask, i) ((mask & (1 << i)) > 0)
 #define nl '\n' 
 typedef std::vector<std::vector<int>> adjlist;
+typedef std::vector<std::vector<std::pair<int, int>>> wadjlist;
 
 template<class T> T _max(T a, T b) { return (a > b) ? a : b; }
 template<class T> T _min(T a, T b) { return (b > a) ? a : b; }
 int lg(unsigned long long i) { return i ? __builtin_clzll(1) - __builtin_clzll(i) : -1; }
+template<class T> T bpow(T a, long long p) { assert(p >= 0); return p == 0 ? T(1) : bpow(a * a, p / 2) * (p & 1 ? a : T(1)); }
 void rd(char& x) { x = std::getchar(); }
 void rd(ll& x) {
     x = 0; int mult = 1; char c; rd(c);
