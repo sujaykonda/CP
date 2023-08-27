@@ -20,6 +20,7 @@ template <int MOD> struct mint {
     friend std::istream& operator>>(std::istream& is, mint& m) { is >> m.v; return is; }
     friend std::ostream& operator<<(std::ostream& os, mint& m) { os << m.v; return os; }
     friend bool operator<(mint a, mint b) { return a.v < b.v; }
+    friend std::string str(mint a) { return str(a.v); }
 };
 
 template <int MOD> struct Comb {

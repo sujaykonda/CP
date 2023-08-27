@@ -18,14 +18,10 @@ struct LCA {
         for(int i = jmp.size() - 1; i >= 0; i--)
             if(dep[jmp[i][a]] >= dep[b]) 
                 a = jmp[i][a];
+        if(a == b) return a;
         for(int i = jmp.size() - 1; i >= 0; i--)
             if(jmp[i][a] != jmp[i][b]) 
                 a = jmp[i][a], b = jmp[i][b];
-        return (a == b) ? a : jmp[0][a];
+        return jmp[0][a];
     }
 };
-
-struct HLD {
-
-};
-

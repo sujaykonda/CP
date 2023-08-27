@@ -1,79 +1,50 @@
+// Source: https://usaco.guide/general/io
+
 #include <bits/stdc++.h>
 using namespace std;
-#define ll long long
-#define maxv 1000000000000000000LL
+using ll = long long;
+
 ll l, r, o;
+vector<ll> sz;
+vector<vector<int>> adj;
 
-struct Node
-{
-    vector<Node *> children;
-    char v = 0;
-    ll s = 0;
-
-    void calc_size()
-    {
-        if (s > 0)
-            return;
-        for (Node *child : children)
-        {
-            child->calc_size();
-            if (child->s > maxv + 1 - s)
-                s = maxv + 1;
-            else
-                s += child->s;
-        }
-        if (children.size() == 0)
-            s = 1;
+void dfs(int s, ll j) {
+    //cout << s << endl;
+    //cout << sz[s] << endl;
+    for(int u : adj[s]) {
+        if(j + sz[u] >= l && j < r)
+            dfs(u, j);
+        j += sz[u];
+        if(j > r || j < 0) j = r + 1;
     }
+    if(s < 26)
+        cout << (char) (s + 'a');
+}
 
-    void print(ll i, ll ls, ll rs)
-    {
-        if (i + s < ls || i >= rs)
-            return;
-        for (Node *child : children)
-        {
-            child->print(i, ls, rs);
-            if (child->s > maxv + 1 - i)
-                i = maxv + 1;
-            else
-                i += child->s;
-            if (i >= rs)
-                return;
-        }
-        if (children.size() == 0)
-            cout << v;
-    }
-};
-
-int main()
-{
-
-    ios::sync_with_stdio(false);
+int main() {
     cin.tie(nullptr);
+    ios_base::sync_with_stdio(false);
     cin >> l >> r >> o;
-    // letter to node
-    Node *root = new Node();
-    root->v = 'a';
-    vector<Node *> ends(26);
-    ends[0] = root;
-    for (int i = 0; i < o; i++)
-    {
-        char pc;
-        string s;
-        cin >> pc >> s;
-        Node *parent = ends[pc - 'a'];
-        ends[pc - 'a'] = 0;
-        for (int i = 0; i < s.length(); i++)
-        {
-            if (ends[s[i] - 'a'] == 0)
-            {
-                ends[s[i] - 'a'] = new Node();
-                ends[s[i] - 'a']->v = s[i];
-            }
-            parent->children.emplace_back(ends[s[i] - 'a']);
+    vector<pair<char, string>> oper(o);
+    for(int i = 0; i < o; i++)
+        cin >> oper[i].first >> oper[i].second;
+    vector<int> top(26);
+    adj.resize(26 + o);
+    sz.resize(26 + o);
+    for(int i = 0; i < 26; i++) top[i] = i, sz[i] = 1;
+    for(int i = o - 1; i >= 0; i--) {
+        adj[26 + i].resize(oper[i].second.length());
+        for(int j = 0; j < adj[26 + i].size(); j++)
+            if(adj[top[oper[i].second[j] - 'a']].size() == 1)
+                adj[26 + i][j] = adj[top[oper[i].second[j] - 'a']][0];
+            else 
+                adj[26 + i][j] = top[oper[i].second[j] - 'a'];
+        for(int j = 0; j < adj[26 + i].size(); j++) {
+            sz[26 + i] += sz[top[oper[i].second[j] - 'a']];
+            if(sz[26 + i] > r || sz[26 + i] < 0) sz[26 + i] = r + 1;
         }
+        top[oper[i].first - 'a'] = 26 + i;
     }
-    root->calc_size();
-    root->print(0, l, r);
+    dfs(top[0], 0);
     cout << endl;
 }
