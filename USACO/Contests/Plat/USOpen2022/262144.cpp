@@ -2,45 +2,55 @@
 using namespace std;
 using ll = long long;
 
-// debug tools
-string str(int x) { return to_string(x); }
-string str(ll x) { return to_string(x); }
-template<class T, class U> string str(pair<T, U> p) { return "(" + str(p.first) + ", " + str(p.second) + ")"; }
-template<class T> string str(T a) { string s = "{"; for(auto v : a) s += str(v) + ", "; 
-    if(s.size() > 2) s.pop_back(), s.pop_back(); s += "}"; return s; }
-template<class T> string strnl(T a) { string s = ""; for(auto v : a) s += str(v) + "\n"; return s; }
-
 #define pb push_back
+const int MX = 5e6, JMPSZ = 5;
+
+int jmp[MX][JMPSZ];
+int x[MX], y[MX];
+ll v[MX];
 
 int main() {
     ios::sync_with_stdio(false), cin.tie(nullptr); 
     int N;
     cin >> N;
-    vector<vector<int>> inters(N);
-    vector<vector<ll>> vals(N);
     vector<int> a(N);
     for(int i = 0; i < N; i++) cin >> a[i];
-    int cnt = 0;
-    for(int i = 1; i < N; i++) cnt += a[i] >= a[i - 1];
-    if(cnt > N / 2) reverse(a.begin(), a.end());
-    for(int i = 0; i < N; i++) inters[i].pb(i + 1), vals[i].pb(a[i]);
-    for(int i = N - 1; i >= 0; i--) {
-        while(inters[i].back() < N) {
-            int ep = inters[i].back();
-            ll lastv = vals[i].back();
-            int k = lower_bound(vals[ep].begin(), vals[ep].end(), lastv) - vals[ep].begin();
-            if(vals[ep].size() == k || (vals[ep][k] > lastv && k > 0)) k--;
-            inters[i].pb(inters[ep][k]), vals[i].pb(max(lastv, vals[ep][k]) + 1);
+
+    vector<pair<int, int>> rev(N);
+    vector<int> s(N);
+    int j = 0;
+    ll ans = 0;
+    function<void(int, int)> f = [&] (int a, int b) {
+        if(a == N) {
+            rev[N] = {b, j};
+            x[j] = a, y[j] = b;
+            for(int d = 0; d < JMPSZ; d++) jmp[j][d] = j;
+            j++;
+            return;
         }
+        if(rev[a].first == b) return;
+        int i = j;
+        x[i] = a, y[i] = b; j++;
+        int k = s[a];
+        while(y[jmp[k][0]] <= b) {
+            for(int d = JMPSZ - 1; d >= 0; d--) 
+                if(y[jmp[k][d]] <= b) 
+                    k = jmp[k][d];
+            if(x[k] == N) break;
+        }
+        f(x[k], max(b, y[k]) + 1);
+        jmp[i][0] = rev[x[k]].second;
+        v[i] = (ll)(x[k] - a) * (y[jmp[i][0]]) + v[jmp[i][0]];
+        for(int d = 0; d < JMPSZ - 1; d++) {
+            jmp[i][d + 1] = jmp[jmp[i][d]][d];
+        }
+        rev[a] = {b, i};
+    };
+    for(int i = N - 1; i >= 0; i--) {
+        f(i + 1, a[i]);
+        s[i] = rev[i + 1].second;
+        ans += a[i] + v[s[i]];
     }
+    cout << ans << endl;
 
-    //cout << strnl(inters) << strnl(vals) << endl;
-
-    ll s = 0;
-    for(int i = 0; i < N; i++) {
-        s += vals[i][0];
-        for(int k = 1; k < inters[i].size(); k++)
-            s += (inters[i][k] - inters[i][k - 1]) * vals[i][k];
-    }
-    cout << s << endl;
 }

@@ -1,5 +1,5 @@
-n = 1000000
-s = str(n) + '\n'
-for i in range(n - 1):
-    s += str(i % (n // 6) + 1) + ' '
+n = 200000
+s = '1\n' + str(n) + '\n'
+for i in range(n):
+    s += str(i) + ' '
 print(s)

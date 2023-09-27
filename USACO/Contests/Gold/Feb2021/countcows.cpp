@@ -1,56 +1,47 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
-bool check(int i, int j) {
-    bool g = true;
-    for(int k = 1; k <= max(i, j); k *= 3)
-        g &= ((((i / k) % 3) % 2) == (((j / k) % 3) % 2));
-    return g;
-}
+typedef array<array<array<ll, 2>, 3>, 3> DP;
 int main() {
+    cin.tie(nullptr), ios::sync_with_stdio(false);
     int Q;
     cin >> Q;
     for(int q = 0; q < Q; q++) {
         ll d, x, y;
         cin >> d >> x >> y;
-        vector<ll> pat;
-        int lp = 0;
-        while(!check(x, y) && lp < 1000 && d >= 0) x++, y++, d--, lp++;
-        if(d == -1 || lp == 1000) {
-            cout << 0 << endl;
-            continue;
-        }
-        int p = 0;
-        while(pat.size() < 30) {
-            x++, y++, p++;
-            if(check(x, y))
-                pat.push_back(p), p = 0;    
-        }
-        int ps = 0;
-        for(int s = 1; s <= pat.size(); s++) {
-            bool good = true;
-            for(int i = 0; i < pat.size(); i++) {
-                if(pat[i] != pat[i % s]) {
-                    good = false;
-                    break;
+        DP dp {};
+        dp[0][0][0] = 1;
+        for(int i = 0; i < 38; i++) {
+            int bx = x % 3;
+            int by = y % 3;
+            int bd = d % 3;
+            DP ndp{};
+            for(int xc = 0; xc < 3; xc++) {
+                for(int yc = 0; yc < 3; yc++) {
+                    for(int high = 0; high < 2; high++) {
+                        if(dp[xc][yc][high] == 0) continue;
+                        for(int pick = 0; pick < 3; pick++) {
+                            if(((bx + xc + pick) % 3) % 2 == ((by + yc + pick) % 3) % 2) {
+                                int nhigh = high ? pick >= bd : pick > bd;
+                                int nxc = (bx + xc + pick) / 3;
+                                int nyc = (by + yc + pick) / 3;
+                                ndp[nxc][nyc][nhigh] += dp[xc][yc][high];
+                            }
+                        }
+                    }
                 }
             }
-            if(good) {
-                ps = s;
-                break;
+            dp = ndp;
+            x /= 3, y /= 3, d /= 3;
+        }
+        ll ans = 0;
+        for(int xc = 0; xc < 3; xc++) {
+            for(int yc = 0; yc < 3; yc++) {
+                if(xc % 2 == yc % 2) {
+                    ans += dp[xc][yc][0];
+                }
             }
         }
-        ll cnt = 1;
-        int plen = 0;
-        for(int i = 0; i < ps; i++)
-            plen += pat[i];
-        cnt += (d / plen) * ps;
-        d %= plen;
-        for(int i = 0; i < ps; i++)
-            if(d - pat[i] >= 0)
-                d -= pat[i], cnt++;
-            else
-                break;
-        cout << cnt << endl;  
+        cout << ans << endl;
     }
 }

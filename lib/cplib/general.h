@@ -38,6 +38,7 @@ template<class T, typename ... R> void rd(T& a, R&... r) {
 
 std::string str(char c) { return std::string(1, c); } std::string str(std::_Bit_reference b) { return b ? "T" : "F"; }
 std::string str(int x) { return std::to_string(x); } std::string str(ll x) { return std::to_string(x); }
+std::string str(double x) { return std::to_string(x); }
 template<class T> std::string str(T a); template<class T, int S> std::string str(std::array<T, S>); template<int S> std::string str(std::bitset<S>);
 template<class T, class U> std::string str(std::pair<T, U> p) { return "(" + str(p.first) + ", " + str(p.second) + ")"; }
 template<class T, int S> std::string str(std::array<T, S> a) { std::string s = "{"; for(int i = 0; i < S - 1; i++) s += str(a[i]) + ", ";

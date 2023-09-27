@@ -1,39 +1,58 @@
-#include <bits/stdc++.h>
+#include <cplib/general.h>
 using namespace std;
-using ll = long long;
-#define pb push_back
-// debug tools
-string str(int x) { return to_string(x); }
-string str(ll x) { return to_string(x); }
-template<class T> string str(T a);
-template<class T, class U> string str(pair<T, U> p) { return "(" + str(p.first) + ", " + str(p.second) + ")"; }
-template<class T, int S> string str(array<T, S> a) { string s = "{"; for(int i = 0; i < S - 1; i++) s += str(a[i]) + ", ";
-    s += str(a[S - 1]) + "}"; return s;}
-template<class T> string str(T a) { string s = "{"; for(auto v : a) s += str(v) + ", "; 
-    if(s.size() > 2) s.pop_back(), s.pop_back(); s += "}"; return s; }
-template<class T> string strnl(T a) { string s = ""; for(auto v : a) s += str(v) + "\n"; return s; }
 
-void testcase() {
-    ll n, k; cin >> n >> k;
-    vector<ll> f(n), d(n);
-    for(int i = 0; i < n; i++) cin >> f[i];
-    for(int i = 0; i < n; i++) cin >> d[i];
-
-    int best = n;
+void tc() {
+    int n, k; rd(n, k);
+    vector<int> f(n); rd(f);
+    vector<int> d(n); rd(d);
+    vector<ll> p(n);
+    for(int i = 0; i < n; i++) p[i] = (ll)f[i] * d[i];
+    vector<vector<int>> pcnt(n, vector<int>(k + 1));
+    vector<vector<int>> gcnt(n, vector<int>(k + 1));
     for(int i = 0; i < n; i++) {
-        ll low = f[i] * d[i];
         for(int j = 0; j < n; j++) {
-            if(f[j] * d[j] < low) {
-                if((low + k) % f[j] > k) {
-                    low -= low % f[j];
+            if(llabs(p[i] - p[j]) <= k) {
+                if(p[i] >= p[j]) {
+                    pcnt[j][p[i] - p[j]]++;
+                } else {
+                    pcnt[j][0]++;
+                    pcnt[j][k + 1 + p[i] - p[j]]--;
                 }
             }
         }
-        if(low + k < f[i]) continue;
+        for(int j = 0; j < n; j++) {
+            if(f[i] > k) {
+                int m = p[j] % f[i];
+                if(m <= k && m < p[j]) {
+                    gcnt[j][0]++;
+                    if(m != 0) {
+                        gcnt[j][k + 1 - m]--;
+                    }
+                }
+                if(m + k >= f[i]) {
+                    gcnt[j][f[i] - m]++;
+                }
+            } else {
+                gcnt[j][max(0ll, f[i] - p[j])]++;
+            }
+        }
     }
+
+    int best = n;
+    for(int i = 0; i < n; i++) {
+        int curp = 0, curg = 0;
+        for(int j = 0; j <= k; j++) {
+            curp += pcnt[i][j];
+            curg += gcnt[i][j];
+            if(curg == n) {
+                best = min(best, n - curp);
+            }
+        }
+    }
+    cout << best << endl;
 }
 
 int main() {
-    int t; cin >> t;
-    for(int i = 0; i < t; i++) testcase();
+    int t; rd(t);
+    for(int i = 0; i < t; i++) tc();
 }
