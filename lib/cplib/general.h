@@ -4,7 +4,8 @@
 #include <bits/stdc++.h>
 using ll = long long;
 #define pb push_back
-#define getbit(mask, i) ((mask & (1 << i)) > 0)
+#define getbit(mask, i) ((mask & (1LL << i)) > 0)
+#define setbit(mask, i, v) ((v ? (mask | (1LL << i)) : mask & (~(1LL << i))))
 #define nl '\n' 
 typedef std::vector<std::vector<int>> adjlist;
 typedef std::vector<std::vector<std::pair<int, int>>> wadjlist;
@@ -36,7 +37,7 @@ template<class T> void rd(T& o)  { for(auto& v : o) rd(v); };
 template<class T, typename ... R> void rd(T& a, R&... r) {
     rd(a), rd(r...); }
 
-std::string str(char c) { return std::string(1, c); } std::string str(std::_Bit_reference b) { return b ? "T" : "F"; }
+std::string str(char c) { return std::string(1, c); }
 std::string str(int x) { return std::to_string(x); } std::string str(ll x) { return std::to_string(x); }
 std::string str(double x) { return std::to_string(x); }
 template<class T> std::string str(T a); template<class T, int S> std::string str(std::array<T, S>); template<int S> std::string str(std::bitset<S>);

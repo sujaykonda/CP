@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using ll = long long;
 #define pb push_back
-#define getbit(mask, i) ((mask & (1 << i)) > 0)
+#define getbit(mask, i) ((mask & (1LL << i)) > 0)
+#define setbit(mask, i, v) ((v ? (mask | (1LL << i)) : mask & (~(1LL << i))))
 #define nl '\n' 
 typedef std::vector<std::vector<int>> adjlist;
 typedef std::vector<std::vector<std::pair<int, int>>> wadjlist;
@@ -33,7 +34,7 @@ template<class T> void rd(T& o)  { for(auto& v : o) rd(v); };
 template<class T, typename ... R> void rd(T& a, R&... r) {
     rd(a), rd(r...); }
 
-std::string str(char c) { return std::string(1, c); } std::string str(std::_Bit_reference b) { return b ? "T" : "F"; }
+std::string str(char c) { return std::string(1, c); }
 std::string str(int x) { return std::to_string(x); } std::string str(ll x) { return std::to_string(x); }
 std::string str(double x) { return std::to_string(x); }
 template<class T> std::string str(T a); template<class T, int S> std::string str(std::array<T, S>); template<int S> std::string str(std::bitset<S>);
@@ -46,69 +47,48 @@ template<class T> std::string str(T a) { std::string s = "{"; int f = 1; for(aut
     s += "}"; return s; }
 template<class T> std::string strnl(T a) { std::string s = ""; for(auto v : a) s += str(v) + '\n'; return s; }
 using namespace std;
+const int MX = 2001;
 
-int main() {
-    int n; rd(n);
-    vector<int> p(n - 1); rd(p);
-    vector<int> cnt(n);
-    vector<int> dep(n);
-    for(int i = 0; i < n - 1; i++) cnt[p[i] - 1]++;
-    for(int i = 1; i < n; i++) dep[i] = 1 + dep[p[i - 1] - 1];
-    if(cnt[0] == n - 1) {
-        cout << 1 << endl;
-        for(int i = 0; i < n - 1; i++) cout << 1 << endl;
-        cout << 1 << endl;
-    } else {
-        vector<int> top(n);
-        for(int i = 1; i < n; i++) {
-            if(p[i - 1] - 1 == 0) top[i] = i;
-            else top[i] = top[p[i - 1] - 1];
+void tc() {
+    int n, d; rd(n, d);
+    vector<int> l(n); rd(l);
+    sort(l.begin(), l.end());
+    vector<int> suff(n + 1);
+    vector<bitset<MX>> sm(n + 1);
+    sm[n][0] = 1;
+    suff[n] = 0;
+    for(int i = n - 1; i >= 0; i--) {
+        sm[i] = sm[i + 1];
+        sm[i] |= sm[i] << l[i];
+        suff[i] = suff[i + 1] + l[i];
+    }
+    array<bitset<MX>, MX> cur, nw;
+    cur[0][0] = 1;
+    for(int i = 0; i < n; i++) {
+        nw = cur;
+        for(int j = 0; j <= d / 2 - l[i]; j++) {
+            nw[j + l[i]] |= cur[j];
         }
-        bool bad = false;
-        vector<int> off(n);
-        for(int i = 1; i < n; i++) {
-            if(cnt[i] == 1) {
-                int c = (dep[i] % 2) + 1;
-                if(off[top[i]] == 0) off[top[i]] = c;
-                else if(off[top[i]] != c) bad = true;
-            }
+        for(int j = 0; j <= d / 2; j++) {
+            nw[j] |= cur[j] << l[i];
         }
-        if(!bad) {
-            cout << 2 << endl;
-            for(int i = 1; i < n; i++) cout << ((off[top[i]] + dep[i]) % 2) + 1 << " ";
-            cout << endl;
-            while(true) {
-                int done ; rd(done);
-                if(done != 0) break;
-                int a, b; rd(a, b);
-                if(b == 1) cout << 2 << endl;
-                else cout << 1 << endl;
-            }
-        } else {
-            cout << 3 << endl;
-            for(int i = 1; i < n; i++) cout << (dep[i] % 3) + 1 << " ";
-            cout << endl;
-            while(true) {
-                int done = 0; rd(done);
-                if(done != 0) break;
-                int a, b, c; rd(a, b, c);
-                if(a == 0) {
-                    if(b == 0) {
-                        cout << 3 << endl;
-                    } else {
-                        cout << 2 << endl;
+        cur = nw;
+        if(d >= suff[i + 1]) {
+            for(int j = 0; j <= (d - suff[i + 1]) / 2; j++) {
+                if(cur[j][d - suff[i + 1] - j]) {
+                    int a1 = j + sm[i + 1]._Find_next(d / 2 - j - 1);
+                    int a2 = d - suff[i + 1] - j + sm[i + 1]._Find_next(max(0, d / 2 - (d - suff[i + 1] - j)) - 1);
+                    if(min(a1, d - a1) >= l[i] || min(a2, d - a2) >= l[i]) {
+                        cout << "YES" << endl;
+                        return;
                     }
-                } else if(b == 0) {
-                    if(c == 0) {
-                        cout << 1 << endl;
-                    } else {
-                        cout << 3 << endl;
-                    }
-                } else {
-                    cout << 1 << endl;
                 }
             }
         }
     }
-    
+    cout << "NO" << endl;
+}
+int main() {
+    int t; rd(t);
+    while(t--) tc();
 }

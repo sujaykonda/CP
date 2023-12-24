@@ -13,8 +13,7 @@ vector<int> sz;
 set<set<int>, cmp> cur;
 void dfs(int s) {
     res[s] = 1;
-    set<set<int>, cmp
-    > nw;
+    set<set<int>, cmp> nw;
     set<int> add;
     sz[s] = 0;
     for(int u : ch[s]) {

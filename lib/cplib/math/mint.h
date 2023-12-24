@@ -34,7 +34,7 @@ template <int MOD> struct Comb {
         for (int i = n; i >= 1; i--)
             invf[i - 1] = invf[i] * i;
     }
-    mint<MOD> choose(int n, int k) { return (k > n) ? 0 : (f[n] * invf[k] * invf[n - k]); }
-    mint<MOD> perm(int n, int k) { return (k > n) ? 0 : (f[n] * invf[n - k]); }
+    mint<MOD> choose(int n, int k) { return (k > n || k < 0 || n < 0) ? 0 : (f[n] * invf[k] * invf[n - k]); }
+    mint<MOD> perm(int n, int k) { return (k > n || k < 0 || n < 0) ? 0 : (f[n] * invf[n - k]); }
 };
 

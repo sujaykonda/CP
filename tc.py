@@ -1,5 +1,7 @@
-n = 200000
-s = '1\n' + str(n) + '\n'
-for i in range(n):
-    s += str(i) + ' '
-print(s)
+import random
+
+N = int(2 * 10**5 - 1)
+tc = str(N) + "\n";
+for i in range(1, 2 * 10**5):
+    tc += str(i) + "\n"
+print(tc)

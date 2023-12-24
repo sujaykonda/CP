@@ -41,5 +41,6 @@ if __name__ == "__main__":
         with open(code_path, 'r') as file:
             code = file.read()
         code = expand(code, [])
+        code = code.replace("// freopen", "freopen").replace("//freopen", "freopen")
         with open("submit.cpp", 'w') as file:
             file.write(code)
