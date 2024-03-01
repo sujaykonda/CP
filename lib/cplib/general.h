@@ -2,6 +2,7 @@
 
 // start
 #include <bits/stdc++.h>
+#include <bits/extc++.h>
 using ll = long long;
 #define pb push_back
 #define getbit(mask, i) ((mask & (1LL << i)) > 0)
@@ -10,12 +11,16 @@ using ll = long long;
 typedef std::vector<std::vector<int>> adjlist;
 typedef std::vector<std::vector<std::pair<int, int>>> wadjlist;
 
+template<class T>
+using Tree = __gnu_pbds::tree<T, __gnu_pbds::null_type, std::less<T>, __gnu_pbds::rb_tree_tag, __gnu_pbds::tree_order_statistics_node_update>;
+
 template <class T> void del(T* t) { if(t->left) del(t->left); if(t->right) del(t->right); delete t;}
 int lg(unsigned long long i) { return i ? __builtin_clzll(1) - __builtin_clzll(i) : -1; }
 template<class T> T bpow(T a, long long p) { assert(p >= 0); return p == 0 ? T(1) : bpow(a * a, p / 2) * (p & 1 ? a : T(1)); }
 void rd(char& x) { x = std::getchar(); }
 void rd(ll& x) {
     x = 0; int mult = 1; char c; rd(c);
+    for(; !isgraph(c); rd(c));
     for (; (c <= 47 || 58 <= c) && c != '-'; rd(c));
     if(c == '-') mult = -1, rd(c);
     for (; (c>47 && c<58); rd(c))

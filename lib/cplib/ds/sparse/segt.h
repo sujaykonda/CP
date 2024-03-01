@@ -28,7 +28,7 @@ template <class D, class B = int> struct _node_segt {
         if(r < l) return D();
         if(l <= lb && rb <= r) return val;
         B m = (lb + rb) / 2;
-        D re;
+        D re = D();
         if(left) re = left->query(l, r) + re;
         if(right) re = re + right->query(l, r);
         return re;

@@ -13,18 +13,11 @@ if not os.path.isfile(path):
     print('ERROR: INPUT IS NOT A FILE')
     exit()
 
-speedup_flag = False
-for arg in sys.argv[2:]:
-    if arg == '-speedup':
-        speedup_flag = True
 
-flags = '-Wall -Wextra -pedantic -std=c++17 -O2 -Wshadow -Wformat=2 -Wfloat-equal -Wno-sign-compare -Wno-unused-result -Wlogical-op -Wshift-overflow=2 -Wduplicated-cond -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 -fsanitize=undefined -fno-sanitize-recover -fstack-protector -fanalyzer'
-
-if speedup_flag:
-    flags = '-std=c++17 -O2'
+flags = ' -std=c++17 -O2 -g -Wall -Wextra -Wshadow -Wconversion -Wfloat-equal -Wduplicated-cond -Wlogical-op '
 
 result = subprocess.run('g++ ' + path + ' ' + flags + ' -o ' + binary_path, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-if(len(result.stderr) > 0):
+if(": error:" in result.stderr):
     print('ERROR COMPILING:')
     print(result.stderr)
     exit()
@@ -42,10 +35,19 @@ end_time = time.time()
 execution_time = end_time - start_time
 
 # Print the error messages, if any
-print('Errors:', result.stderr)
+print('Errors:', result.stderr[:-1])
 
 # Print the execution time
 print('Execution time: {:.6f} seconds'.format(execution_time))
+
+if len(result.stderr) > 0:
+    print()
+    result = subprocess.run('gdb ./' + binary_path + ' < debug.in', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    cause = result.stdout[:result.stdout.rindex("gdb") - 2]
+    cause = cause[cause.rindex("gdb") + 5:]
+    print('Debugger:')
+    print(cause)
+
 
 
 

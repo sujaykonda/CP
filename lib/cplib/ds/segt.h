@@ -8,8 +8,8 @@ struct SegT {
     T D;
     std::vector<T> t;
     SegT(int n) : SegT(n, T()) {}
-    SegT(int n, T D) : n(n), t(2 * n + 1), D(D) {}
-    void mod(int k, T u) {
+    SegT(int n, T D) : n(n), t(2 * n, D), D(D) {}
+    void upd(int k, T u) {
         for (t[k += n] = u; k /= 2; ) t[k] = comb(t[k * 2], t[k * 2 + 1]);
     }
     T query(int l, int r) {

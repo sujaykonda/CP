@@ -1,61 +1,60 @@
-#include <cplib/ds/sparse/rurq.h>
-using namespace std;
-
-struct LZ { ll set, add; };
-struct U { ll set, add; };
-struct LL { ll x; void set(LL y) { x = y.x; } };
-typedef _node_rurq<LL, LZ, U> node;
-void apply(U u, node* n) {
-    if(u.set == 0) {
-        n->d.x += u.add * (n->rb - n->lb + 1);
-        if(n->lz.set == 0) {
-            n->lz.add += u.add;
-        } else {
-            n->lz.set += u.add;
-        }
-    } else {
-        n->d.x = u.set * (n->rb - n->lb + 1);
-        n->lz.add = 0;
-        n->lz.set = u.set;
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <utility>
+#include <ranges>
+#include <numeric>
+struct cmp {
+    bool operator()(const std::pair<int, long long> &a, 
+        const std::pair<int, long long> &b) {
+        return a.first > b.first;
     }
-}
-void push(node* n) {
-    if(n->lz.set != 0) {
-        n->left->d.x = (n->left->rb - n->left->lb + 1) * n->lz.set;
-        n->right->d.x = (n->right->rb - n->right->lb + 1) * n->lz.set;
-        n->left->lz.set = n->right->lz.set = n->lz.set;
-        n->left->lz.add = n->right->lz.add = 0;
-        n->lz.set = 0;
-    }
-    else {
-        n->left->d.x += (n->left->rb - n->left->lb + 1) * n->lz.add;
-        n->right->d.x += (n->right->rb - n->right->lb + 1) * n->lz.add;
-        if(n->left->lz.set != 0) n->left->lz.set += n->lz.add;
-        else n->left->lz.add += n->lz.add;
-        if(n->right->lz.set != 0) n->right->lz.set += n->lz.add;
-        else n->right->lz.add += n->lz.add;
-        n->lz.add = 0;
-    }
-}
-
+};
 int main() {
-    int n, q; rd(n), rd(q);
-    node* segt = new node(n - 1);
-    for(int i = 0; i < n; i++) {
-        int v; rd(v);
-        segt->upd(U{v, 0}, i, i);
+    int N;
+    std::cin >> N;
+    std::vector<int> A(N), D(N);
+    for (int i = 0; i < N; i++) { std::cin >> A[i]; std::cout << A[i] << "\n"; }
+    std::cout << "\n" << N << "\n";
+    for (int i = 0; i < N; i++) { std::cin >> D[i]; std::cout << i << " " << D[i] << "\n"; }
+    std::cout << __LINE__ << "\n";
+    std::vector<std::vector<std::pair<int, long long>>> pushed(N);
+
+    for (int i = 0; i < N; i++) { 
+        pushed[std::max(0, i - D[i])].emplace_back(i + D[i], A[i]);
     }
-    for(int i = 0; i < q; i++) {
-        int t, a, b; rd(t), rd(a), rd(b);
-        a--, b--;
-        if(t == 3)
-            cout << segt->query(a, b).x << endl;
-        else {
-            int x; rd(x);
-            if(t == 1)
-                segt->upd(U{0, x}, a, b);
-            else
-                segt->upd(U{x, 0}, a, b);
+    auto test = [&](long long Z) {
+        std::cout << Z << "\n";
+        std::priority_queue<std::pair<int, long long>,
+            std::vector<std::pair<int, long long>>, 
+            cmp> shift;
+        for (int i = 0; i < N; i++) {
+            for (auto j : pushed[i]) { shift.push(j); }
+            long long left = Z;
+            if (shift.size() > 0 && shift.top().first < i) { return false; }
+            while (shift.size() > 0 && left >= shift.top().second) {
+                left -= shift.top().second;
+                shift.pop();
+            }
+            if (left > 0) {
+                auto tmp = shift.top();
+                shift.pop();
+                shift.emplace(tmp.first, tmp.second - left);
+            }
         }
-    }
+        return shift.empty();
+    };
+    // std::cout << *std::ranges::partition_point(
+    //     std::views::iota(0LL, 200000000000001LL),
+    //     test) - 1 << "\n";
+    // long long lo = 0, hi = 200000000000000LL;
+    // while (lo < hi) {
+    //     long long mid = std::midpoint(lo, hi);
+    //     if (test(mid)) hi = mid;
+    //     else lo = mid + 1;
+    // }
+    // std::cout << lo << "\n";
+    //bool b = test(7LL);
+    //std::cout << b << "\n";
 }
