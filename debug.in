@@ -1,0 +1,3 @@
+run < in.in > out.out
+bt
+exit
